@@ -1,0 +1,30 @@
+"use client";
+
+import { useActionState, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { updateEmployee, type EmployeeState } from "./actions";
+
+type Position={id:string|number;name:string};
+export type EmployeeRecord={id:string|number;employee_number:string|null;name:string;position_id:string|number;phone:string|null;address:string|null;emergency_contact_name:string|null;emergency_contact_phone:string|null;id_number:string|null;start_date:string|null;end_date:string|null;notes:string|null;status:string};
+const initial:EmployeeState={success:false,message:""};
+
+export function EmployeeRow({employee,positions,positionName,currentSalary,columns=["position","salary","status"]}:{employee:EmployeeRecord;positions:Position[];positionName:string;currentSalary:string;columns?:string[]}){
+  const[open,setOpen]=useState(false);const[state,action,pending]=useActionState(updateEmployee,initial);
+  useEffect(()=>{if(!open)return;const close=(event:KeyboardEvent)=>{if(event.key==="Escape")setOpen(false)};document.addEventListener("keydown",close);return()=>document.removeEventListener("keydown",close)},[open]);
+  return <><tr onClick={()=>setOpen(true)} className="cursor-pointer transition hover:bg-slate-800/60" title="Click to view or edit employee">
+    <td className="px-4 py-4 font-medium text-emerald-300">{employee.name}</td>{columns.includes("employee_number")&&<td className="px-4 py-4">{employee.employee_number||"—"}</td>}{columns.includes("position")&&<td className="px-4 py-4 text-slate-200">{positionName}</td>}{columns.includes("salary")&&<td className="px-4 py-4">{currentSalary}</td>}{columns.includes("phone")&&<td className="px-4 py-4">{employee.phone||"—"}</td>}{columns.includes("start_date")&&<td className="px-4 py-4">{employee.start_date||"—"}</td>}{columns.includes("end_date")&&<td className="px-4 py-4">{employee.end_date||"—"}</td>}{columns.includes("status")&&<td className="px-4 py-4"><span className={`rounded-full px-3 py-1 text-sm capitalize ${employee.status==="active"?"bg-emerald-400/10 text-emerald-300":"bg-slate-700 text-slate-300"}`}>{employee.status}</span></td>}
+  </tr>{open&&createPortal(<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4" onMouseDown={event=>{if(event.target===event.currentTarget)setOpen(false)}}><section role="dialog" aria-modal="true" aria-labelledby={`employee-title-${employee.id}`} className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl">
+    <div className="flex items-start justify-between gap-4"><div><p className="text-sm font-medium text-emerald-400">EMPLOYEE DETAILS</p><h2 id={`employee-title-${employee.id}`} className="mt-1 text-2xl font-bold">{employee.name}</h2><p className="mt-2 text-sm text-slate-400">Current salary: <span className="text-amber-200">{currentSalary}</span></p></div><button type="button" onClick={()=>setOpen(false)} className="rounded-lg px-3 py-2 text-slate-400 hover:bg-slate-800" aria-label="Close employee details">✕</button></div>
+    <form action={action} className="mt-6 space-y-4"><input type="hidden" name="id" value={employee.id}/>
+      <div className="grid gap-4 sm:grid-cols-2"><Field label="Employee name"><input className="field" name="name" defaultValue={employee.name} required/></Field><Field label="Employee number"><input className="field" name="employee_number" defaultValue={employee.employee_number??""}/></Field></div>
+      <div className="grid gap-4 sm:grid-cols-2"><Field label="Position"><select className="field" name="position_id" defaultValue={String(employee.position_id)}>{positions.map(position=><option key={position.id} value={position.id}>{position.name}</option>)}</select></Field><Field label="Phone"><input className="field" name="phone" type="tel" defaultValue={employee.phone??""}/></Field></div>
+      <div className="grid gap-4 sm:grid-cols-3"><Field label="ID number"><input className="field" name="id_number" defaultValue={employee.id_number??""}/></Field><Field label="Start date"><input className="field" name="start_date" type="date" defaultValue={employee.start_date??""}/></Field><Field label="End date"><input className="field" name="end_date" type="date" defaultValue={employee.end_date??""}/></Field></div>
+      <Field label="Address"><textarea className="field resize-y" name="address" rows={2} defaultValue={employee.address??""}/></Field>
+      <fieldset className="rounded-xl border border-slate-800 p-4"><legend className="px-2 text-sm font-semibold text-slate-300">Emergency contact</legend><div className="grid gap-4 sm:grid-cols-2"><Field label="Name"><input className="field" name="emergency_contact_name" defaultValue={employee.emergency_contact_name??""}/></Field><Field label="Phone"><input className="field" name="emergency_contact_phone" type="tel" defaultValue={employee.emergency_contact_phone??""}/></Field></div></fieldset>
+      <Field label="Notes"><textarea className="field resize-y" name="notes" rows={3} defaultValue={employee.notes??""}/></Field><Field label="Status"><select className="field" name="status" defaultValue={employee.status}><option value="active">Active</option><option value="inactive">Inactive</option></select></Field>
+      {state.message&&<p className={`rounded-xl p-3 text-sm ${state.success?"bg-emerald-400/10 text-emerald-300":"bg-red-400/10 text-red-200"}`}>{state.message}</p>}
+      <div className="flex justify-end gap-3"><button type="button" onClick={()=>setOpen(false)} className="rounded-xl border border-slate-700 px-5 py-3 text-slate-300">Close</button><button disabled={pending} className="rounded-xl bg-emerald-400 px-5 py-3 font-semibold text-white disabled:opacity-60">{pending?"Saving…":"Save changes"}</button></div>
+    </form>
+  </section></div>,document.body)}</>;
+}
+function Field({label,children}:{label:string;children:React.ReactNode}){return <label className="block text-sm font-medium text-slate-300">{label}<div className="mt-2">{children}</div></label>}
