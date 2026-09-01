@@ -13,7 +13,7 @@ export async function POST(request:Request){
   if(question.length<3||question.length>1000||!datePattern.test(from)||!datePattern.test(to)||from>to)return NextResponse.json({error:"Enter a valid question and date range."},{status:400});
   const supabase=await createClient();
   const[trips,accounts,invoices,payments,expenses,payroll]=await Promise.all([
-    supabase.from("trip_details").select("trip_number,trip_date,driver_name,region_name,assigned_orders,delivered_orders,undelivered_orders,total_payment_value,expected_cash,cash_handed,cash_difference,fuel_expense,delivery_expense,other_expense,status").gte("trip_date",from).lte("trip_date",to).order("trip_date").limit(1000),
+    supabase.from("trip_details").select("trip_number,trip_date,driver_name,region_name,assigned_orders,delivered_orders,undelivered_orders,total_payment_value,expected_cash,cash_handed,cash_difference,fuel_expense,other_expense,status").gte("trip_date",from).lte("trip_date",to).order("trip_date").limit(1000),
     supabase.from("account_balances").select("code,name,account_type,balance").order("code").limit(300),
     supabase.from("supplier_invoices").select("invoice_number,invoice_date,amount,status,suppliers(name)").gte("invoice_date",from).lte("invoice_date",to).limit(500),
     supabase.from("supplier_payments").select("payment_number,payment_date,amount,status,suppliers(name)").gte("payment_date",from).lte("payment_date",to).limit(500),
