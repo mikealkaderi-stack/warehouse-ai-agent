@@ -5,7 +5,7 @@ const links = [
   ["/employees", "Employees"], ["/accounting", "Accounting"],
   ["/accounting/suppliers", "Suppliers"], ["/accounting/trip-expenses", "Trip Expenses"],
   ["/payroll", "Payroll"], ["/payroll/commission", "Commission"],
-  ["/reports", "Reports"], ["/settings", "Settings"],
+  ["/reports", "Reports"], ["/assistant", "AI Assistant"], ["/settings", "Settings"],
 ] as const;
 
 export function AppNav({ current }: { current?: string }) {
