@@ -4,6 +4,7 @@ const links = [
   ["/", "Dashboard"], ["/trips", "Trips"], ["/drivers", "Drivers"],
   ["/employees", "Employees"], ["/accounting", "Accounting"],
   ["/accounting/suppliers", "Suppliers"], ["/accounting/trip-expenses", "Trip Expenses"],
+  ["/accounting/journals", "Journal Entries"],
   ["/payroll", "Payroll"], ["/payroll/commission", "Commission"],
   ["/reports", "Reports"], ["/assistant", "AI Assistant"], ["/settings", "Settings"],
 ] as const;

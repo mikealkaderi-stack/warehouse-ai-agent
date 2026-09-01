@@ -44,10 +44,8 @@ export async function addManualJournal(_: AccountingState, data: FormData): Prom
     {journal_entry_id:entry.id,line_number:2,account_id:creditAccount,debit:0,credit:value},
   ]);
   if(lineError) { await supabase.from("journal_entries").delete().eq("id",entry.id); return fail(lineError.message); }
-  const {error:postError}=await supabase.rpc("post_journal",{entry_id:entry.id});
-  if(postError) return fail(postError.message);
-  revalidatePath("/accounting"); revalidatePath("/accounting/ledger");
-  return ok(`${number} was balanced and posted.`);
+  revalidatePath("/accounting"); revalidatePath("/accounting/journals");
+  return ok(`${number} was saved as a draft. Review it in Journal Entries before posting.`);
 }
 
 export async function addExpense(_: AccountingState, data: FormData): Promise<AccountingState> {
@@ -64,4 +62,3 @@ export async function addExpense(_: AccountingState, data: FormData): Promise<Ac
   revalidatePath("/accounting"); revalidatePath("/accounting/expenses"); revalidatePath("/accounting/ledger");
   return ok(`${number} was recorded and posted.`);
 }
-

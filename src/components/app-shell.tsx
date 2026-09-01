@@ -13,7 +13,7 @@ const groups:NavGroup[]=[
   {label:"Dashboard",icon:"grid",items:[{label:"Trips dashboard",href:"/"},{label:"Accounting overview",href:"/accounting"}]},
   {label:"Staff",icon:"people",items:[{label:"Drivers",href:"/drivers"},{label:"Employees",href:"/employees"}]},
   {label:"Trips",icon:"truck",items:[{label:"New trip",href:"/trips#new-trip"},{label:"Trip fuel",href:"/accounting/trip-expenses"},{label:"Trip list",href:"/trips#trip-list"},{label:"Regions",href:"/regions"},{label:"Vehicles",href:"/vehicles"}]},
-  {label:"Accounting",icon:"ledger",items:[{label:"Overview",href:"/accounting"},{label:"Chart of accounts",href:"/accounting/accounts"},{label:"Suppliers",href:"/accounting/suppliers"},{label:"Invoices",href:"/accounting/invoices"},{label:"Expenses",href:"/accounting/expenses"},{label:"Payments",href:"/accounting/payments"},{label:"General ledger",href:"/accounting/ledger"}]},
+  {label:"Accounting",icon:"ledger",items:[{label:"Overview",href:"/accounting"},{label:"Chart of accounts",href:"/accounting/accounts"},{label:"Journal entries",href:"/accounting/journals"},{label:"Suppliers",href:"/accounting/suppliers"},{label:"Invoices",href:"/accounting/invoices"},{label:"Expenses",href:"/accounting/expenses"},{label:"Payments",href:"/accounting/payments"},{label:"General ledger",href:"/accounting/ledger"}]},
   {label:"Payroll",icon:"payroll",items:[{label:"Payroll overview",href:"/payroll"},{label:"Commission schemes",href:"/payroll/commission"}]},
   {label:"AI Assistant",icon:"ai",items:[{label:"Ask SRT",href:"/assistant"}]},
 ];
